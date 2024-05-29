@@ -61,8 +61,8 @@ if run:
     )
 
     if webrtc_ctx.video_processor:
-        while not webrtc_ctx.video_processor.face_detected and time.time() - webrtc_ctx.video_processor.start_time < detection_duration:
-            pass
+        # while not webrtc_ctx.video_processor.face_detected and time.time() - webrtc_ctx.video_processor.start_time < detection_duration:
+        #     pass
 
         if webrtc_ctx.video_processor.face_detected:
             st.success("Perry's identity is verified!, Click the link below.")
