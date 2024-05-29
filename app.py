@@ -50,28 +50,28 @@ class FaceDetectionTransformer(VideoTransformerBase):
 st.title("AIV System")
 run = st.button('Run')
 
-if run:
-    webrtc_ctx = webrtc_streamer(
-        key="example",
-        mode=WebRtcMode.SENDRECV,
-        rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
-        video_processor_factory=FaceDetectionTransformer,
-        media_stream_constraints={"video": True, "audio": False},
-        async_processing=True,
-    )
+# if run:
+webrtc_ctx = webrtc_streamer(
+    key="example",
+    mode=WebRtcMode.SENDRECV,
+    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+    video_processor_factory=FaceDetectionTransformer,
+    media_stream_constraints={"video": True, "audio": False},
+    async_processing=True,
+)
 
-    if webrtc_ctx.video_processor:
-        # while not webrtc_ctx.video_processor.face_detected and time.time() - webrtc_ctx.video_processor.start_time < detection_duration:
-        #     pass
+if webrtc_ctx.video_processor:
+    while not webrtc_ctx.video_processor.face_detected and time.time() - webrtc_ctx.video_processor.start_time < detection_duration:
+        pass
 
-        if webrtc_ctx.video_processor.face_detected:
-            st.success("Perry's identity is verified!, Click the link below.")
-            with open("present.rar", "rb") as file:
-                st.download_button(
-                    label="Download present",
-                    data=file,
-                    file_name="archive.rar",
-                    mime="application/x-rar-compressed"
-                )
-        else:
-            st.warning("Perry not detected within 15 seconds.")
+    if webrtc_ctx.video_processor.face_detected:
+        st.success("Perry's identity is verified!, Click the link below.")
+        with open("present.rar", "rb") as file:
+            st.download_button(
+                label="Download present",
+                data=file,
+                file_name="archive.rar",
+                mime="application/x-rar-compressed"
+            )
+    else:
+        st.warning("Perry not detected within 15 seconds.")
