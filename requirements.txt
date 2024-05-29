@@ -1,4 +1,4 @@
 streamlit
 opencv-python-headless
-dlib
+dlib-bin
 face_recognition
