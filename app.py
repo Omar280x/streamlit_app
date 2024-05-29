@@ -3,49 +3,27 @@ import cv2
 import face_recognition
 import numpy as np
 
-# Load Perry's reference image and encode it
-perry_image = face_recognition.load_image_file("image.jpg")
-perry_face_encoding = face_recognition.face_encodings(perry_image)[0]
-
-# Create a list of known face encodings and their names
-known_face_encodings = [perry_face_encoding]
-known_face_names = ["Perry"]
+perry_image = cv2.imread("image.jpg")
 
 def process_frame(frame):
-    # Resize frame for faster processing
-    small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
-    rgb_small_frame = small_frame[:, :, ::-1]
+    frame = frame[:, :, ::-1]
 
-    # Find all the faces and face encodings in the current frame
-    face_locations = face_recognition.face_locations(rgb_small_frame)
-    face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+    result = DeepFace.verify(img1_path = perry_image, img2_path = frame)
 
-    for face_encoding, face_location in zip(face_encodings, face_locations):
-        # Check if the face is a match for Perry's face
-        matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-        name = "Unknown"
+    verified_perry = result["verified"]
 
-        if True in matches:
-            first_match_index = matches.index(True)
-            name = known_face_names[first_match_index]
+    if verified_perry:
+        detected_face = DeepFace.extract_faces(img_path=frame, enforce_detection=False)
+        x, y, w, h = face['facial_area']['x'], face['facial_area']['y'], face['facial_area']['w'], face['facial_area']['h']
+    
+        cv2.rectangle(frame, (x, y), (w+x, h+y), (0, 0, 255), 2)
+        cv2.putText(frame, "Happy 22nd Birthday Perry", (x, y - 10), cv2.FONT_HERSHEY_DUPLEX, 1.0, (255, 0, 0), 2)
+    
+        return frame
 
-        # Draw a frame around Perry's face and display the birthday message
-        if name == "Perry":
-            top, right, bottom, left = face_location
-            top *= 4
-            right *= 4
-            bottom *= 4
-            left *= 4
-
-            cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-            cv2.putText(frame, "Happy 22nd Birthday Perry!", (left, top - 10), cv2.FONT_HERSHEY_DUPLEX, 1.0, (255, 0, 0), 2)
-
-    return frame
-
-st.title("Happy Birthday Perry!")
+st.title("AIV System")
 run = st.checkbox('Run')
 
-# Create a video capture object
 video_capture = cv2.VideoCapture(0)
 
 frame_window = st.image([])
@@ -55,11 +33,17 @@ while run:
     if not ret:
         break
 
-    # Process the frame
     frame = process_frame(frame)
 
-    # Display the frame in Streamlit
     frame_window.image(frame, channels='BGR')
 
-# Release the video capture object
 video_capture.release()
+
+if verified_perry:
+    st.success("Click the link below")
+    with open(present_file, "rb") as file:
+        btn = st.download_button(
+            label="Download",
+            data=file,
+            file_name="perrylol99.rar",
+            mime="application/x-rar-compressed")
