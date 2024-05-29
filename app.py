@@ -4,7 +4,7 @@ import face_recognition
 import numpy as np
 
 # Load Perry's reference image and encode it
-perry_image = face_recognition.load_image_file("perry.jpg")
+perry_image = face_recognition.load_image_file("image.jpg")
 perry_face_encoding = face_recognition.face_encodings(perry_image)[0]
 
 # Create a list of known face encodings and their names
