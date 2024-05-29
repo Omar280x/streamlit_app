@@ -57,6 +57,7 @@ if run:
         rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
         video_processor_factory=FaceDetectionTransformer,
         media_stream_constraints={"video": True, "audio": False},
+        async_processing=True,
     )
 
     if webrtc_ctx.video_processor:
