@@ -1,9 +1,8 @@
 import streamlit as st
 import cv2
-import face_recognition
-import numpy as np
+from deepface import DeepFace
 
-perry_image = cv2.imread("image.jpg")
+perry_image = cv2.imread("perry.jpg")
 
 def process_frame(frame):
     frame = frame[:, :, ::-1]
