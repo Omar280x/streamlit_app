@@ -23,6 +23,8 @@ class FaceDetectionTransformer(VideoTransformerBase):
 
         result = DeepFace.verify(img1_path=perry_image_path, img2_path=detected_faces, enforce_detection=False)
 
+        print(result)
+
         if result['verified'] == False:
             face = result['region']
             x, y, w, h = face['x'], face['y'], face['w'], face['h']
