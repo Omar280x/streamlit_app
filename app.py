@@ -51,7 +51,7 @@ st.title("AIV System")
 run = st.button('Run')
 
 if run:
-    while True
+    while True:
         webrtc_ctx = webrtc_streamer(
             key="example",
             mode=WebRtcMode.SENDRECV,
