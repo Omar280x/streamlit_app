@@ -23,9 +23,12 @@ class FaceDetectionTransformer(VideoTransformerBase):
 
         result = DeepFace.verify(img1_path=perry_image_path, img2_path=detected_faces, enforce_detection=False)
 
-        face = result['region']
-        x, y, w, h = face['x'], face['y'], face['w'], face['h']
-        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
+        if result['verified'] == False:
+            face = result['region']
+            x, y, w, h = face['x'], face['y'], face['w'], face['h']
+            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
+
+            return av.VideoFrame.from_ndarray(img, format="bgr24")
         
         if result['verified']:
             self.face_detected = True
@@ -35,7 +38,7 @@ class FaceDetectionTransformer(VideoTransformerBase):
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
             cv2.putText(img, "Happy 22nd Birthday Perry", (x, y - 10), cv2.FONT_HERSHEY_DUPLEX, 1.0, (255, 0, 0), 2) 
 
-        return av.VideoFrame.from_ndarray(img, format="bgr24")
+            return av.VideoFrame.from_ndarray(img, format="bgr24")
 
 st.title("AIV System")
 run = st.button('Run')
