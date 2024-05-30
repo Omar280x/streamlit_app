@@ -43,10 +43,10 @@ run = st.button('Run')
 #while run:
 webrtc_ctx = webrtc_streamer(
     key="example",
-    mode=WebRtcMode.SENDRECV,
+    #mode=WebRtcMode.SENDRECV,
     rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
     video_processor_factory=FaceDetectionTransformer,
-    media_stream_constraints={"video": True, "audio": False},
+    #media_stream_constraints={"video": True, "audio": False},
 )
 
     # if webrtc_ctx.video_processor:
