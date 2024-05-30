@@ -12,13 +12,8 @@ perry_image = DeepFace.detectFace(img_path=perry_image_path)
 face_detected = False
 start_time = None
 
-class FaceDetectionTransformer(VideoTransformerBase):
-    def __init__(self):
-        self.face_detected = False
-
+class FaceDetectionTransformer:
     def recv(self, frame):
-        global face_detected, start_time
-
         img = frame.to_ndarray(format="bgr24")
 
         result = DeepFace.verify(img1_path=perry_image_path, img2_path=detected_faces, enforce_detection=False)
@@ -52,7 +47,6 @@ webrtc_ctx = webrtc_streamer(
     rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
     video_processor_factory=FaceDetectionTransformer,
     media_stream_constraints={"video": True, "audio": False},
-    async_processing=True,
 )
 
     # if webrtc_ctx.video_processor:
