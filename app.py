@@ -11,41 +11,30 @@ perry_image = DeepFace.detectFace(img_path=perry_image_path)
 
 face_detected = False
 start_time = None
-detection_duration = 15  
 
 class FaceDetectionTransformer(VideoTransformerBase):
     def __init__(self):
         self.face_detected = False
-        self.start_time = None
 
     def transform(self, frame):
         global face_detected, start_time
 
         img = frame.to_ndarray(format="bgr24")
 
-        if self.start_time is None:
-            self.start_time = time.time()
+        result = DeepFace.verify(img1_path=perry_image_path, img2_path=detected_faces, enforce_detection=False)
 
-        try:
-            detected_faces = DeepFace.detectFace(img, detector_backend='opencv', enforce_detection=False)
-
-            if detected_faces.size != 0:
-                result = DeepFace.verify(img1_path=perry_image_path, img2_path=detected_faces, enforce_detection=False)
-                
-                if result['verified']:
-                    self.face_detected = True
-                    # Draw a frame around Perry's face and display the birthday message
-                    face = result['region']
-                    x, y, w, h = face['x'], face['y'], face['w'], face['h']
-                    cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                    cv2.putText(img, "Happy 22nd Birthday Perry", (x, y - 10), cv2.FONT_HERSHEY_DUPLEX, 1.0, (255, 0, 0), 2)
-
-        except Exception as e:
-            pass
-
-        if time.time() - self.start_time > detection_duration:
-            webrtc_streamer.key_stop()
+        face = result['region']
+        x, y, w, h = face['x'], face['y'], face['w'], face['h']
+        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
         
+        if result['verified']:
+            self.face_detected = True
+            # Draw a frame around Perry's face and display the birthday message
+            face = result['region']
+            x, y, w, h = face['x'], face['y'], face['w'], face['h']
+            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
+            cv2.putText(img, "Happy 22nd Birthday Perry", (x, y - 10), cv2.FONT_HERSHEY_DUPLEX, 1.0, (255, 0, 0), 2) 
+
         return av.VideoFrame.from_ndarray(img, format="bgr24")
 
 st.title("AIV System")
