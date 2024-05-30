@@ -3,6 +3,7 @@ import cv2
 from deepface import DeepFace
 import time
 from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, WebRtcMode
+import av
 
 perry_image_path = "image.jpg"
 
@@ -45,7 +46,7 @@ class FaceDetectionTransformer(VideoTransformerBase):
         if time.time() - self.start_time > detection_duration:
             webrtc_streamer.key_stop()
         
-        return img
+        return av.VideoFrame.from_ndarray(img, format="bgr24")
 
 st.title("AIV System")
 run = st.button('Run')
@@ -60,18 +61,18 @@ while run:
         async_processing=True,
     )
     
-    if webrtc_ctx.video_processor:
-        # while not webrtc_ctx.video_processor.face_detected and time.time() - webrtc_ctx.video_processor.start_time < detection_duration:
-        #     pass
+    # if webrtc_ctx.video_processor:
+    #     # while not webrtc_ctx.video_processor.face_detected and time.time() - webrtc_ctx.video_processor.start_time < detection_duration:
+    #     #     pass
     
-        if webrtc_ctx.video_processor.face_detected:
-            st.success("Perry's identity is verified!, Click the link below.")
-            with open("present.rar", "rb") as file:
-                st.download_button(
-                    label="Download present",
-                    data=file,
-                    file_name="archive.rar",
-                    mime="application/x-rar-compressed"
-                )
-        else:
-            st.warning("Perry not detected within 15 seconds.")
+    #     if webrtc_ctx.video_processor.face_detected:
+    #         st.success("Perry's identity is verified!, Click the link below.")
+    #         with open("present.rar", "rb") as file:
+    #             st.download_button(
+    #                 label="Download present",
+    #                 data=file,
+    #                 file_name="archive.rar",
+    #                 mime="application/x-rar-compressed"
+    #             )
+    #     else:
+    #         st.warning("Perry not detected within 15 seconds.")
