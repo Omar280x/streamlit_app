@@ -51,16 +51,16 @@ class FaceDetectionTransformer(VideoTransformerBase):
 st.title("AIV System")
 run = st.button('Run')
 
-while run:
-    webrtc_ctx = webrtc_streamer(
-        key="example",
-        mode=WebRtcMode.SENDRECV,
-        rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
-        video_processor_factory=FaceDetectionTransformer,
-        media_stream_constraints={"video": True, "audio": False},
-        async_processing=True,
-    )
-    
+#while run:
+webrtc_ctx = webrtc_streamer(
+    key="example",
+    mode=WebRtcMode.SENDRECV,
+    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+    video_processor_factory=FaceDetectionTransformer,
+    media_stream_constraints={"video": True, "audio": False},
+    async_processing=True,
+)
+
     # if webrtc_ctx.video_processor:
     #     # while not webrtc_ctx.video_processor.face_detected and time.time() - webrtc_ctx.video_processor.start_time < detection_duration:
     #     #     pass
