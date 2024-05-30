@@ -16,7 +16,7 @@ class FaceDetectionTransformer(VideoTransformerBase):
     def __init__(self):
         self.face_detected = False
 
-    def transform(self, frame):
+    def recv()(self, frame):
         global face_detected, start_time
 
         img = frame.to_ndarray(format="bgr24")
