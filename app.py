@@ -7,6 +7,8 @@ import av
 
 perry_image_path = "image.jpg"
 
+perry_detected = False
+
 class FaceDetectionTransformer:
     def recv(self, frame):
         img = frame.to_ndarray(format="bgr24")
@@ -21,6 +23,7 @@ class FaceDetectionTransformer:
             return av.VideoFrame.from_ndarray(img, format="bgr24")
         
         if result['verified']:
+            perry_detected = True
             face = result['facial_areas']["img2"]
             x, y, w, h = face['x'], face['y'], face['w'], face['h']
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
@@ -31,7 +34,7 @@ class FaceDetectionTransformer:
 st.title("AIV System")
 
 webrtc_ctx = webrtc_streamer(
-    key="object-detection",
+    key="face_detection",
     mode=WebRtcMode.SENDRECV,
     rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
     video_transformer_factory=FaceDetectionTransformer,
@@ -39,27 +42,12 @@ webrtc_ctx = webrtc_streamer(
     async_processing=True,
 )
 
-# webrtc_ctx = webrtc_streamer(
-#     key="example",
-#     #mode=WebRtcMode.SENDRECV,
-#     rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
-#     video_processor_factory=FaceDetectionTransformer,
-#     #media_stream_constraints={"video": True, "audio": False},
-# )
-
-
-    # if webrtc_ctx.video_processor:
-    #     # while not webrtc_ctx.video_processor.face_detected and time.time() - webrtc_ctx.video_processor.start_time < detection_duration:
-    #     #     pass
-    
-    #     if webrtc_ctx.video_processor.face_detected:
-    #         st.success("Perry's identity is verified!, Click the link below.")
-    #         with open("present.rar", "rb") as file:
-    #             st.download_button(
-    #                 label="Download present",
-    #                 data=file,
-    #                 file_name="archive.rar",
-    #                 mime="application/x-rar-compressed"
-    #             )
-    #     else:
-    #         st.warning("Perry not detected within 15 seconds.")
+if perry_detected:
+    st.success("Perry's identity is verified!, Click the link below")
+    with open("present.rar", "rb") as file:
+        st.download_button(
+            label="Download present",
+            data=file,
+            file_name="archive.rar",
+            mime="application/x-rar-compressed"
+        )
