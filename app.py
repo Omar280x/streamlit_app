@@ -16,15 +16,15 @@ class FaceDetectionTransformer:
         if result['verified'] == False:
             face = result['facial_areas']["img2"]
             x, y, w, h = face['x'], face['y'], face['w'], face['h']
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
+            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
             return av.VideoFrame.from_ndarray(img, format="bgr24")
         
         if result['verified']:
             face = result['facial_areas']["img2"]
             x, y, w, h = face['x'], face['y'], face['w'], face['h']
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
-            cv2.putText(img, "Happy 22nd Birthday Perry", (x, y - 10), cv2.FONT_HERSHEY_DUPLEX, 1.0, (255, 0, 0), 2) 
+            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.putText(img, "Happy 22nd Birthday Perry", (x, y - 10), cv2.FONT_HERSHEY_DUPLEX, 1.0, (0, 0, 255), 2) 
 
             return av.VideoFrame.from_ndarray(img, format="bgr24")
 
