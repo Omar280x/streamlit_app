@@ -7,33 +7,32 @@ import av
 
 perry_image_path = "image.jpg"
 
-perry_image = DeepFace.detectFace(img_path=perry_image_path)
-
-face_detected = False
-start_time = None
-
 class FaceDetectionTransformer:
     def recv(self, frame):
         img = frame.to_ndarray(format="bgr24")
 
-        result = DeepFace.verify(img1_path=perry_image_path, img2_path=img, enforce_detection=False)
-
-        if result['verified'] == False:
-            face = result['region']
-            x, y, w, h = face['x'], face['y'], face['w'], face['h']
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
-
-            return av.VideoFrame.from_ndarray(img, format="bgr24")
+        cv2.rectangle(img, (10, 10), (500 + 5, 5+ 200), (0, 0, 255), 2)
         
-        if result['verified']:
-            self.face_detected = True
-            # Draw a frame around Perry's face and display the birthday message
-            face = result['region']
-            x, y, w, h = face['x'], face['y'], face['w'], face['h']
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
-            cv2.putText(img, "Happy 22nd Birthday Perry", (x, y - 10), cv2.FONT_HERSHEY_DUPLEX, 1.0, (255, 0, 0), 2) 
+        return av.VideoFrame.from_ndarray(img, format="bgr24")
 
-            return av.VideoFrame.from_ndarray(img, format="bgr24")
+        # result = DeepFace.verify(img1_path=perry_image_path, img2_path=img, enforce_detection=False)
+
+        # if result['verified'] == False:
+        #     face = result['region']
+        #     x, y, w, h = face['x'], face['y'], face['w'], face['h']
+        #     cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
+
+        #     return av.VideoFrame.from_ndarray(img, format="bgr24")
+        
+        # if result['verified']:
+        #     self.face_detected = True
+        #     # Draw a frame around Perry's face and display the birthday message
+        #     face = result['region']
+        #     x, y, w, h = face['x'], face['y'], face['w'], face['h']
+        #     cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
+        #     cv2.putText(img, "Happy 22nd Birthday Perry", (x, y - 10), cv2.FONT_HERSHEY_DUPLEX, 1.0, (255, 0, 0), 2) 
+
+        #     return av.VideoFrame.from_ndarray(img, format="bgr24")
 
 st.title("AIV System")
 run = st.button('Run')
