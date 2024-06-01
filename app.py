@@ -21,8 +21,6 @@ class FaceDetectionTransformer:
             return av.VideoFrame.from_ndarray(img, format="bgr24")
         
         if result['verified']:
-            self.face_detected = True
-            # Draw a frame around Perry's face and display the birthday message
             face = result['region']
             x, y, w, h = face['x'], face['y'], face['w'], face['h']
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
