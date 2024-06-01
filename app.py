@@ -41,14 +41,20 @@ run = st.button('Run')
 webrtc_ctx = webrtc_streamer(
     key="object-detection",
     mode=WebRtcMode.SENDRECV,
-    rtc_configuration={
-        "iceServers": get_ice_servers(),
-        "iceTransportPolicy": "relay",
-    },
+    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
     video_frame_callback=video_frame_callback,
     media_stream_constraints={"video": True, "audio": False},
     async_processing=True,
 )
+
+# webrtc_ctx = webrtc_streamer(
+#     key="example",
+#     #mode=WebRtcMode.SENDRECV,
+#     rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+#     video_processor_factory=FaceDetectionTransformer,
+#     #media_stream_constraints={"video": True, "audio": False},
+# )
+
 
     # if webrtc_ctx.video_processor:
     #     # while not webrtc_ctx.video_processor.face_detected and time.time() - webrtc_ctx.video_processor.start_time < detection_duration:
