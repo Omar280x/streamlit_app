@@ -35,7 +35,6 @@ class FaceDetectionTransformer:
         #     return av.VideoFrame.from_ndarray(img, format="bgr24")
 
 st.title("AIV System")
-run = st.button('Run')
 
 webrtc_ctx = webrtc_streamer(
     key="object-detection",
