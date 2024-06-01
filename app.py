@@ -23,7 +23,7 @@ class FaceDetectionTransformer:
             return av.VideoFrame.from_ndarray(img, format="bgr24")
         
         if result['verified']:
-            perry_detected = True
+            global perry_detected = True
             face = result['facial_areas']["img2"]
             x, y, w, h = face['x'], face['y'], face['w'], face['h']
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
