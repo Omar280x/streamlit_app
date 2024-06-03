@@ -8,8 +8,9 @@ import av
 perry_image_path = "image.jpg"
 
 class FaceDetectionTransformer:
-    def __init__(self):
-        self.perry_detected = False
+    #def __init__(self):
+    perry_detected = False
+    
     def recv(self, frame):
         img = frame.to_ndarray(format="bgr24")
 
@@ -23,7 +24,7 @@ class FaceDetectionTransformer:
             return av.VideoFrame.from_ndarray(img, format="bgr24")
         
         if result['verified']:
-            self.perry_detected = True
+            perry_detected = True
             face = result['facial_areas']["img2"]
             x, y, w, h = face['x'], face['y'], face['w'], face['h']
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
@@ -41,6 +42,7 @@ webrtc_ctx = webrtc_streamer(
     media_stream_constraints={"video": True, "audio": False},
     async_processing=True,
 )
+
 
 if webrtc_ctx.video_transformer:    
    if webrtc_ctx.video_transformer.perry_detected:
