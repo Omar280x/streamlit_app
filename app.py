@@ -21,17 +21,16 @@ class FaceDetectionTransformer(VideoTransformerBase):
             x, y, w, h = face['x'], face['y'], face['w'], face['h']
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-            return av.VideoFrame.from_ndarray(img, format="bgr24"), ""
+            return av.VideoFrame.from_ndarray(img, format="bgr24")
         
         if result['verified']:
             self.perry_detected = True
-            y = True
             face = result['facial_areas']["img2"]
             x, y, w, h = face['x'], face['y'], face['w'], face['h']
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.putText(img, "Happy 22nd Birthday Perry", (x, y - 10), cv2.FONT_HERSHEY_DUPLEX, 1.0, (0, 0, 255), 2) 
             
-            return av.VideoFrame.from_ndarray(img, format="bgr24"), y
+            return av.VideoFrame.from_ndarray(img, format="bgr24")
 
 st.title("AIV System")
 
@@ -39,7 +38,7 @@ webrtc_ctx = webrtc_streamer(
     key="face_detection",
     mode=WebRtcMode.SENDRECV,
     rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
-    video_transformer_factory, x=FaceDetectionTransformer,
+    video_transformer_factory=FaceDetectionTransformer,
     media_stream_constraints={"video": True, "audio": False},
     async_processing=True,
 )
@@ -47,7 +46,6 @@ webrtc_ctx = webrtc_streamer(
 
 if webrtc_ctx.video_transformer:
 #     if webrtc_ctx.video_transformer.true_variable:
-    if x:
         st.success("Perry's identity is verified, Download the file below")
         # with open("present.rar", "rb") as file:
         #     st.download_button(
