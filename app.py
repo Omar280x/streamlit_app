@@ -29,12 +29,10 @@ class FaceDetectionTransformer(VideoTransformerBase):
             x, y, w, h = face['x'], face['y'], face['w'], face['h']
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.putText(img, "Happy 22nd Birthday Perry", (x, y - 10), cv2.FONT_HERSHEY_DUPLEX, 1.0, (0, 0, 255), 2) 
+            
+            return av.VideoFrame.from_ndarray(img, format="bgr24"), st.success("Perry's identity is verified, Download the file below")
 
-            st.title("AIV System")
-
-            return av.VideoFrame.from_ndarray(img, format="bgr24")
-
-#st.title("AIV System")
+st.title("AIV System")
 
 webrtc_ctx = webrtc_streamer(
     key="face_detection",
