@@ -9,7 +9,7 @@ perry_image_path = "image.jpg"
 
 class FaceDetectionTransformer(VideoTransformerBase):
     def __init__(self):
-        self.perry_detected = False
+        self.perry_detected = True
     
     def recv(self, frame):
         img = frame.to_ndarray(format="bgr24")
@@ -17,6 +17,7 @@ class FaceDetectionTransformer(VideoTransformerBase):
         result = DeepFace.verify(img1_path=perry_image_path, img2_path=img, enforce_detection=False, model_name="Facenet")
 
         if result['verified'] == False:
+            self.perry_detected = False
             face = result['facial_areas']["img2"]
             x, y, w, h = face['x'], face['y'], face['w'], face['h']
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
@@ -24,7 +25,7 @@ class FaceDetectionTransformer(VideoTransformerBase):
             return av.VideoFrame.from_ndarray(img, format="bgr24")
         
         if result['verified']:
-            self.perry_detected = True
+            #self.perry_detected = True
             face = result['facial_areas']["img2"]
             x, y, w, h = face['x'], face['y'], face['w'], face['h']
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
@@ -45,7 +46,7 @@ webrtc_ctx = webrtc_streamer(
 
 
 if webrtc_ctx.video_transformer:
-#     if webrtc_ctx.video_transformer.true_variable:
+    if webrtc_ctx.video_transformer.perry_detected:
         st.success("Perry's identity is verified, Download the file below")
         # with open("present.rar", "rb") as file:
         #     st.download_button(
