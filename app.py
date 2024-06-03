@@ -40,12 +40,12 @@ webrtc_ctx = webrtc_streamer(
     rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
     video_transformer_factory=FaceDetectionTransformer,
     media_stream_constraints={"video": True, "audio": False},
-    async_processing=True,
+    #async_processing=True,
 )
 
 
 if webrtc_ctx.video_transformer:
-    if webrtc_ctx.video_transformer.perry_detected:
+    if webrtc_ctx.video_transformer[1]:
         st.success("Perry's identity is verified, Download the file below")
         # with open("present.rar", "rb") as file:
         #     st.download_button(
