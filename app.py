@@ -7,9 +7,9 @@ import av
 
 perry_image_path = "image.jpg"
 
-perry_detected = False
-
 class FaceDetectionTransformer:
+    def __init__(self):
+        self.perry_detected = False
     def recv(self, frame):
         img = frame.to_ndarray(format="bgr24")
 
@@ -23,7 +23,7 @@ class FaceDetectionTransformer:
             return av.VideoFrame.from_ndarray(img, format="bgr24")
         
         if result['verified']:
-            global perry_detected = True
+            self.perry_detected = True
             face = result['facial_areas']["img2"]
             x, y, w, h = face['x'], face['y'], face['w'], face['h']
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
@@ -42,12 +42,13 @@ webrtc_ctx = webrtc_streamer(
     async_processing=True,
 )
 
-if perry_detected:
-    st.success("Perry's identity is verified!, Click the link below")
-    with open("present.rar", "rb") as file:
-        st.download_button(
-            label="Download present",
-            data=file,
-            file_name="archive.rar",
-            mime="application/x-rar-compressed"
-        )
+if webrtc_ctx.video_transformer:
+    if webrtc_ctx.video_transformer.perry_detected:
+        st.success("Perry's identity is verified, Download the file below")
+        with open("present.rar", "rb") as file:
+            st.download_button(
+                label="Download present",
+                data=file,
+                file_name="archive.rar",
+                mime="application/x-rar-compressed"
+            )
