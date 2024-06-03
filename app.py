@@ -9,7 +9,7 @@ perry_image_path = "image.jpg"
 
 class FaceDetectionTransformer(VideoTransformerBase):
     def __init__(self):
-        self.perry_detected = True
+        self.perry_detected = False
     
     def recv(self, frame):
         img = frame.to_ndarray(format="bgr24")
@@ -45,7 +45,6 @@ webrtc_ctx = webrtc_streamer(
 
 
 if webrtc_ctx.video_transformer:
-    #st.success(f"{webrtc_ctx.video_transformer.perry_detected}")
     if webrtc_ctx.video_transformer.perry_detected:
         st.success("Perry's identity is verified, Download the file below")
         # with open("present.rar", "rb") as file:
