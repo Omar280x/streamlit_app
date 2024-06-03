@@ -1,57 +1,52 @@
 import streamlit as st
 import cv2
 from deepface import DeepFace
-import time
-from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, WebRtcMode
-import av
 
 perry_image_path = "image.jpg"
-perry = cv2.imread(perry_image_path)
 
-class FaceDetectionTransformer(VideoTransformerBase):
-    def __init__(self):
-        self.perry_detected = False
-    
-    def recv(self, frame):
-        img = frame.to_ndarray(format="bgr24")
+def detect_faces_and_stream():
+    # OpenCV Video Capture
+    cap = cv2.VideoCapture(0)
 
-        result = DeepFace.verify(img1_path=perry_image_path, img2_path=img, enforce_detection=False, model_name="Facenet")
+    # Check if the webcam is opened successfully
+    if not cap.isOpened():
+        st.error("Error: Unable to open webcam.")
+        return
 
-        if result['verified'] == False:
-            face = result['facial_areas']["img2"]
-            x, y, w, h = face['x'], face['y'], face['w'], face['h']
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    # Display success message
+    st.success("Webcam is now open. Press 'q' to exit.")
 
-            return av.VideoFrame.from_ndarray(img, format="bgr24")
-        
-        if result['verified']:
-            self.perry_detected = True
-            face = result['facial_areas']["img2"]
-            x, y, w, h = face['x'], face['y'], face['w'], face['h']
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            cv2.putText(img, "Happy 22nd Birthday Perry", (x, y - 10), cv2.FONT_HERSHEY_DUPLEX, 1.0, (0, 0, 255), 2) 
-            
-            return av.VideoFrame.from_ndarray(img, format="bgr24")
+    # Create a window to display the webcam stream
+    cv2.namedWindow("AIV System", cv2.WINDOW_NORMAL)
 
+    while True:
+        # Capture frame-by-frame
+        ret, frame = cap.read()
+
+        if ret:
+            # Perform face detection
+            result = DeepFace.verify(img1_path=perry_image_path, img2_path=frame, enforce_detection=False, model_name="Facenet")
+
+            if result['verified']:
+                face = result['facial_areas']['img2']
+                x, y, w, h = face['x'], face['y'], face['w'], face['h']
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                cv2.putText(frame, "Happy 22nd Birthday Perry", (x, y - 10), cv2.FONT_HERSHEY_DUPLEX, 1.0, (0, 0, 255), 2)
+
+            # Display the frame
+            st.image(frame, channels="BGR")
+
+        # Break the loop if 'q' is pressed
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    # Release the webcam and close all windows
+    cap.release()
+    cv2.destroyAllWindows()
+
+# Streamlit App
 st.title("AIV System")
 
-webrtc_ctx = webrtc_streamer(
-    key="face_detection",
-    mode=WebRtcMode.SENDRECV,
-    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
-    video_transformer_factory=FaceDetectionTransformer,
-    media_stream_constraints={"video": True, "audio": False},
-    #async_processing=True,
-)
+st.write("This app streams from your webcam and performs face detection.")
 
-
-if webrtc_ctx.video_transformer:
-    if webrtc_ctx.video_transformer.perry_detected:
-        st.success("Perry's identity is verified, Download the file below")
-        # with open("present.rar", "rb") as file:
-        #     st.download_button(
-        #         label="Download present",
-        #         data=file,
-        #         file_name="archive.rar",
-        #         mime="application/x-rar-compressed"
-        #     )
+detect_faces_and_stream()
