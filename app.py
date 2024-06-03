@@ -6,6 +6,7 @@ from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, WebRtcMode
 import av
 
 perry_image_path = "image.jpg"
+perry = cv2.imread(perry_image_path)
 
 class FaceDetectionTransformer(VideoTransformerBase):
     def __init__(self):
@@ -45,7 +46,7 @@ webrtc_ctx = webrtc_streamer(
 
 
 if webrtc_ctx.video_transformer:
-    if webrtc_ctx.video_transformer.recv()[1]:
+    if webrtc_ctx.video_transformer.recv(perry)[1]:
         st.success("Perry's identity is verified, Download the file below")
         # with open("present.rar", "rb") as file:
         #     st.download_button(
