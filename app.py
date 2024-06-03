@@ -45,10 +45,10 @@ webrtc_ctx = webrtc_streamer(
 if webrtc_ctx.video_transformer:
     if webrtc_ctx.video_transformer.perry_detected:
         st.success("Perry's identity is verified, Download the file below")
-        with open("present.rar", "rb") as file:
-            st.download_button(
-                label="Download present",
-                data=file,
-                file_name="archive.rar",
-                mime="application/x-rar-compressed"
-            )
+        # with open("present.rar", "rb") as file:
+        #     st.download_button(
+        #         label="Download present",
+        #         data=file,
+        #         file_name="archive.rar",
+        #         mime="application/x-rar-compressed"
+        #     )
