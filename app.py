@@ -12,7 +12,6 @@ class FaceDetectionTransformer(VideoTransformerBase):
         self.perry_detected = False
     
     def recv(self, frame):
-        st.title("AIV System")
         img = frame.to_ndarray(format="bgr24")
 
         result = DeepFace.verify(img1_path=perry_image_path, img2_path=img, enforce_detection=False, model_name="Facenet")
@@ -22,7 +21,7 @@ class FaceDetectionTransformer(VideoTransformerBase):
             x, y, w, h = face['x'], face['y'], face['w'], face['h']
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-            return av.VideoFrame.from_ndarray(img, format="bgr24")
+            return av.VideoFrame.from_ndarray(img, format="bgr24"), self.perry_detected
         
         if result['verified']:
             self.perry_detected = True
@@ -31,9 +30,9 @@ class FaceDetectionTransformer(VideoTransformerBase):
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.putText(img, "Happy 22nd Birthday Perry", (x, y - 10), cv2.FONT_HERSHEY_DUPLEX, 1.0, (0, 0, 255), 2) 
             
-            return av.VideoFrame.from_ndarray(img, format="bgr24")
+            return av.VideoFrame.from_ndarray(img, format="bgr24"), self.perry_detected
 
-#st.title("AIV System")
+st.title("AIV System")
 
 webrtc_ctx = webrtc_streamer(
     key="face_detection",
