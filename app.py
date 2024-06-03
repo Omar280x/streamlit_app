@@ -42,11 +42,9 @@ webrtc_ctx = webrtc_streamer(
     async_processing=True,
 )
 
-if webrtc_ctx.video_transformer:
-    st.success("Perry's identity is verified, Download the file below")
-    
-   # if webrtc_ctx.video_transformer.perry_detected:
-        #st.success("Perry's identity is verified, Download the file below")
+if webrtc_ctx.video_transformer:    
+   if webrtc_ctx.video_transformer.perry_detected:
+        st.success("Perry's identity is verified, Download the file below")
         # with open("present.rar", "rb") as file:
         #     st.download_button(
         #         label="Download present",
