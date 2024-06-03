@@ -30,6 +30,9 @@ class FaceDetectionTransformer(VideoTransformerBase):
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.putText(img, "Happy 22nd Birthday Perry", (x, y - 10), cv2.FONT_HERSHEY_DUPLEX, 1.0, (0, 0, 255), 2) 
 
+            if self.perry_detected == True:
+                true_variable = True
+
             return av.VideoFrame.from_ndarray(img, format="bgr24")
 
 st.title("AIV System")
@@ -45,7 +48,7 @@ webrtc_ctx = webrtc_streamer(
 
 
 if webrtc_ctx.video_transformer:
-    if webrtc_ctx.video_transformer.perry_detected:
+    if webrtc_ctx.video_transformer.true_variable:
         st.success("Perry's identity is verified, Download the file below")
         # with open("present.rar", "rb") as file:
         #     st.download_button(
