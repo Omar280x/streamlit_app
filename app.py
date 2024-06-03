@@ -9,15 +9,15 @@ perry_image_path = "image.jpg"
 
 class FaceDetectionTransformer(VideoTransformerBase):
     def __init__(self):
-        self.perry_detected = True
+        self.perry_detected = False
     
     def recv(self, frame):
+        st.title("AIV System")
         img = frame.to_ndarray(format="bgr24")
 
         result = DeepFace.verify(img1_path=perry_image_path, img2_path=img, enforce_detection=False, model_name="Facenet")
 
         if result['verified'] == False:
-            self.perry_detected = False
             face = result['facial_areas']["img2"]
             x, y, w, h = face['x'], face['y'], face['w'], face['h']
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
@@ -25,7 +25,7 @@ class FaceDetectionTransformer(VideoTransformerBase):
             return av.VideoFrame.from_ndarray(img, format="bgr24")
         
         if result['verified']:
-            #self.perry_detected = True
+            self.perry_detected = True
             face = result['facial_areas']["img2"]
             x, y, w, h = face['x'], face['y'], face['w'], face['h']
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
@@ -33,7 +33,7 @@ class FaceDetectionTransformer(VideoTransformerBase):
             
             return av.VideoFrame.from_ndarray(img, format="bgr24")
 
-st.title("AIV System")
+#st.title("AIV System")
 
 webrtc_ctx = webrtc_streamer(
     key="face_detection",
