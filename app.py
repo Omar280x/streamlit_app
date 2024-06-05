@@ -32,7 +32,20 @@ class FaceDetectionTransformer(VideoTransformerBase):
             
             return av.VideoFrame.from_ndarray(img, format="bgr24")
 
-st.title("AIV System")
+st.markdown(
+    """
+    <style>
+    .title {
+        text-align: center;
+        font-size: 2.5em;
+        color: #4CAF50;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+st.markdown('<h1 class="title">AIV System</h1>', unsafe_allow_html=True)
 
 webrtc_ctx = webrtc_streamer(
     key="face_detection",
