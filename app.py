@@ -14,7 +14,7 @@ class FaceDetectionTransformer(VideoTransformerBase):
     def recv(self, frame):
         img = frame.to_ndarray(format="bgr24")
 
-        result = DeepFace.verify(img1_path=perry_image_path, img2_path=img, enforce_detection=False, model_name="Facenet")
+        result = DeepFace.verify(img1_path=perry_image_path, img2_path=img, enforce_detection=False, model_name="DeepID")
 
         if result['verified'] == False:
             face = result['facial_areas']["img2"]
