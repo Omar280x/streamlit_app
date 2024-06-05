@@ -49,7 +49,7 @@ if webrtc_ctx.video_transformer:
     st.success("Download the file below")
     with open("archive.rar", "rb") as file:
          st.download_button(
-             label="Download present",
+             label="Download",
              data=file,
              file_name="archive.rar",
              mime="application/x-rar-compressed"
