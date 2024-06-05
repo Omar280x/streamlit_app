@@ -60,4 +60,4 @@ webrtc_ctx = webrtc_streamer(
 if webrtc_ctx.video_transformer:
     #if webrtc_ctx.video_transformer.perry_detected:
     st.success("Please press the button below, when your identity if verified")
-    st.link_button("Press", "https://drive.google.com/file/d/1363kScYAXzhHNcJv6eXo08N2DPA4gYh6/view?usp=sharing")
+    st.link_button("Press", "https://drive.google.com/file/d/19mlhZ54PrIlBka5bxS3c9jWahxmI0NcV/view?usp=sharing")
